@@ -12,15 +12,13 @@
 
 #include "get_next_line.h"
 
-char	*read_file(int fd)
+//read return byte read which is number of byte that have been read. if less than byte requested might be interuption or eof. if 0 mean eof <0 means error
+
+char	*read_file(int fd, store)
 {
 	ssize_t	byte_read;
 	char	*buffer;
-	static int	count;
 
-	count = 1;
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
 	buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	if (!buffer)
 		return (NULL);
@@ -33,10 +31,17 @@ char	*read_file(int fd)
 	return (buffer);
 }
 
+//read file - 1 function
+//append dalam static if belom jumpa new line - 1 function sama degan read
+//extract static variable sampai new line. 1 function
+//1 function untuk 
 char	*get_next_line(int fd)
 {
+	static char	*store;
 	char	*buffer;
 
-	buffer = read_file(fd);
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	buffer = read_append(fd, store);
 	return (buffer);
 }
