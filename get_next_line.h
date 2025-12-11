@@ -6,7 +6,7 @@
 /*   By: kkaman <kkaman@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 14:38:54 by kkaman            #+#    #+#             */
-/*   Updated: 2025/12/01 18:10:08 by kkaman           ###   ########.fr       */
+/*   Updated: 2025/12/11 16:49:25 by kkaman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,10 @@
 # endif
 
 char	*get_next_line(int fd);
+char	*read_append(int fd, char *store);
+char	*ft_strchr(const char *s, int c);
+char	*ft_strjoin(char *s1, char *s2);
+size_t	ft_strlen(char *s);
 void	*ft_calloc(size_t nmemb, size_t size);
 void	ft_bzero(void *s, size_t n);
 

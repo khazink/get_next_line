@@ -6,7 +6,7 @@
 /*   By: kkaman <kkaman@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 16:09:02 by kkaman            #+#    #+#             */
-/*   Updated: 2025/12/01 18:41:28 by kkaman           ###   ########.fr       */
+/*   Updated: 2025/12/11 16:50:03 by kkaman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,18 @@ void	ft_bzero(void *s, size_t n)
 	}
 }
 
+size_t	ft_strlen(char *s)
+{
+	size_t	i;
+
+	if (!s)
+		return (0);
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+
 void	*ft_calloc(size_t nmemb, size_t size)
 {
 	void	*ptr;
@@ -37,4 +49,42 @@ void	*ft_calloc(size_t nmemb, size_t size)
 		return (NULL);
 	ft_bzero(ptr, total_size);
 	return (ptr);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	if (!s)
+		return (NULL);
+	while (*s)
+	{
+		if (*s == c)
+			return ((char *)s);
+		s++;
+	}
+	if (c == '\0')
+		return ((char *)s);
+	return (NULL);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	char	*res;
+	size_t	i;
+	size_t	j;
+
+	res = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	if (!res || !s1 || !s2)
+		return (NULL);
+	i = 0;
+	while (s1[i])
+	{
+		res[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (s2[j])
+		res[i++] = s2[j++];
+	res[i] = '\0';
+	free(s1);
+	return (res);
 }

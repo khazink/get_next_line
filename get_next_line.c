@@ -6,15 +6,15 @@
 /*   By: kkaman <kkaman@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 16:28:06 by kkaman            #+#    #+#             */
-/*   Updated: 2025/12/01 18:51:25 by kkaman           ###   ########.fr       */
+/*   Updated: 2025/12/11 16:50:23 by kkaman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
 //read return byte read which is number of byte that have been read. if less than byte requested might be interuption or eof. if 0 mean eof <0 means error
-
-char	*read_file(int fd, store)
+//buffer only store value from read. need to tranfer/append to store if not value gone
+char	*read_append(int fd, char *store)
 {
 	ssize_t	byte_read;
 	char	*buffer;
@@ -22,11 +22,21 @@ char	*read_file(int fd, store)
 	buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	if (!buffer)
 		return (NULL);
-	bytes_read = read(fd, buffer, BUFFER_SIZE);
-	if (byte_read <= 0)
+	while (!ft_strchr(store, '\n') && byte_read > 0)
 	{
-		free(buffer);
-		return (NULL);
+		byte_read = read(fd, buffer, BUFFER_SIZE);
+		if (byte_read <= 0)
+		{
+			free(buffer);
+			return (NULL);
+		}
+		buffer[byte_read] = '\0';
+		store = ft_strjoin(store, buffer);
+		if (!store)
+		{
+			free(buffer);
+			return (NULL);
+		}
 	}
 	return (buffer);
 }
@@ -38,10 +48,10 @@ char	*read_file(int fd, store)
 char	*get_next_line(int fd)
 {
 	static char	*store;
-	char	*buffer;
+//	char	*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buffer = read_append(fd, store);
-	return (buffer);
+	store = read_append(fd, store);
+	return (store);
 }
