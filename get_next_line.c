@@ -12,6 +12,29 @@
 
 #include "get_next_line.h"
 
+//extract one by one in store and stop until new line
+//
+char	*extract(char *store)
+{
+	int		i;
+	int		j;
+	char	*line;
+
+	i = 0;
+	while (store[i] != '\n')
+		i++;
+	line = malloc((i + 1) * sizeof(char));
+	if (!line)
+		return (NULL);
+	j = 0;
+	while (j < i)
+	{
+		line[j] = store[j];
+		j++;
+	}
+	line[i] = '\0';
+	return (line);
+}
 //read return byte read which is number of byte that have been read. if less than byte requested might be interuption or eof. if 0 mean eof <0 means error
 //buffer only store value from read. need to tranfer/append to store if not value gone
 char	*read_append(int fd, char *store)
@@ -38,7 +61,7 @@ char	*read_append(int fd, char *store)
 			return (NULL);
 		}
 	}
-	return (buffer);
+	return (store);
 }
 
 //read file - 1 function
@@ -48,10 +71,11 @@ char	*read_append(int fd, char *store)
 char	*get_next_line(int fd)
 {
 	static char	*store;
-//	char	*line;
+	char	*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	store = read_append(fd, store);
-	return (store);
+	line = extract(store);
+	return (line);
 }

@@ -23,6 +23,7 @@
 
 char	*get_next_line(int fd);
 char	*read_append(int fd, char *store);
+char    *extract(char *store);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strjoin(char *s1, char *s2);
 size_t	ft_strlen(char *s);
