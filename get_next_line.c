@@ -12,9 +12,15 @@
 
 #include "get_next_line.h"
 
+//extact line by line until null/newline
+//
+char	*extra_line(char *store)
+{
+
+}
 //extract one by one in store and stop until new line
 //
-char	*extract(char *store)
+char	*extract_line(char *store)
 {
 	int		i;
 	int		j;
@@ -76,6 +82,7 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	store = read_append(fd, store);
-	line = extract(store);
+	line = extract_line(store);
+	store = extra_line(store);
 	return (line);
 }
