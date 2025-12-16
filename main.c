@@ -17,17 +17,22 @@ int	main(void)
 	int	fd;
 	char	*next_line;
 	int	count;
+	int i;
 
 	count = 0;
 	fd = open("file.txt", O_RDONLY);
 	if (fd < 0)//error open file
-	return (1);
-	next_line = get_next_line(fd);
-	if (next_line == NULL)
-		printf("NULL on GNL");
-	count++;
-	printf("[%d]:%s\n", count, next_line);
-	next_line = NULL;
+		return (1);
+	i = 0;
+	while (i < 5)
+	{
+		
+		next_line = get_next_line(fd);
+		count++;
+		printf("[%d]:%s", count, next_line);
+		next_line = NULL;
+		i++;
+	}
 	close(fd);
 	return (0);
 }

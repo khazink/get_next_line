@@ -12,11 +12,29 @@
 
 #include "get_next_line.h"
 
-//extact line by line until null/newline
-//
+//extact line by line until newline
+//then return extra line until \0
 char	*extra_line(char *store)
 {
+	char	*extra;
+	int		i;
 
+	while (*store && *store != '\n')
+    	store++;
+	i = 0;
+	if (*store == '\n')
+	{
+		while (store[i])
+			i++;
+	}
+	extra = malloc((i + 1) * sizeof(char));
+	while (store[i])
+		{
+			extra[i] = store[i];
+			i++;
+		}
+	extra[i] = '\0';
+	return (extra);
 }
 //extract one by one in store and stop until new line
 //
@@ -27,9 +45,9 @@ char	*extract_line(char *store)
 	char	*line;
 
 	i = 0;
-	while (store[i] != '\n')
+	while (store[i] && store[i] != '\n')
 		i++;
-	line = malloc((i + 1) * sizeof(char));
+	line = malloc((i + 2) * sizeof(char));
 	if (!line)
 		return (NULL);
 	j = 0;
@@ -37,6 +55,11 @@ char	*extract_line(char *store)
 	{
 		line[j] = store[j];
 		j++;
+	}
+	if (store[i] == '\n')
+	{
+		line[i] = '\n';
+		i++;
 	}
 	line[i] = '\0';
 	return (line);
