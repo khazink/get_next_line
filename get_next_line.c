@@ -6,7 +6,7 @@
 /*   By: kkaman <kkaman@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 16:28:06 by kkaman            #+#    #+#             */
-/*   Updated: 2025/12/12 18:23:37 by kkaman           ###   ########.fr       */
+/*   Updated: 2025/12/17 18:13:19 by kkaman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,32 @@ char	*extra_line(char *store)
 	char	*extra;
 	int		i;
 
-	while (*store && *store != '\n')
-    	store++;
 	i = 0;
+	while (store[i] && store[i] != '\n')
+		i++
+	if (store[i] == '\0')
+	{
+		free(store);
+		return (NULL);
+	}
+	i++;
 	if (*store == '\n')
 	{
 		while (store[i])
 			i++;
 	}
-	extra = malloc((i + 1) * sizeof(char));
+	extra = malloc((i+1) * sizeof(char));
+	i = 1;
 	while (store[i])
-		{
-			extra[i] = store[i];
-			i++;
-		}
+	{
+		extra[i] = store[i];
+		i++;
+	}
 	extra[i] = '\0';
 	return (extra);
 }
 //extract one by one in store and stop until new line
-//
+
 char	*extract_line(char *store)
 {
 	int		i;
@@ -66,6 +73,7 @@ char	*extract_line(char *store)
 }
 //read return byte read which is number of byte that have been read. if less than byte requested might be interuption or eof. if 0 mean eof <0 means error
 //buffer only store value from read. need to tranfer/append to store if not value gone
+
 char	*read_append(int fd, char *store)
 {
 	ssize_t	byte_read;
@@ -100,7 +108,7 @@ char	*read_append(int fd, char *store)
 char	*get_next_line(int fd)
 {
 	static char	*store;
-	char	*line;
+	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
