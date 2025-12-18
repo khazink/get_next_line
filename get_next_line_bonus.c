@@ -1,21 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkaman <kkaman@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 16:28:06 by kkaman            #+#    #+#             */
-/*   Updated: 2025/12/18 22:22:52 by kkaman           ###   ########.fr       */
+/*   Updated: 2025/12/18 21:31:59 by kkaman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*extra_line(char *store)
 {
 	char	*extra;
 	int		i;
+	int		j;
 
 	if (!store)
 		return (NULL);
@@ -24,10 +25,17 @@ char	*extra_line(char *store)
 		i++;
 	if (store[i] == '\0')
 		return (free(store), NULL);
-	extra = ft_strdup(store + i + 1);
+	j = i++;
+	while (store[j])
+		j++;
+	if (j - i == 0)
+		return (free(store), NULL);
+	extra = malloc(((j - i) + 1) * sizeof(char));
+	j = 0;
+	while (store[i])
+		extra[j++] = store[i++];
 	free(store);
-	if (extra && *extra == '\0')
-		return (free(extra), NULL);
+	extra[j] = '\0';
 	return (extra);
 }
 
@@ -37,9 +45,9 @@ char	*extract_line(char *store)
 	int		j;
 	char	*line;
 
+	i = 0;
 	if (!store || !store[0])
 		return (NULL);
-	i = 0;
 	while (store[i] && store[i] != '\n')
 		i++;
 	line = malloc((i + 2) * sizeof(char));
@@ -65,11 +73,11 @@ char	*read_append(int fd, char *store)
 	ssize_t	byte_read;
 	char	*buffer;
 
-	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	if (!buffer)
-		return (free(store), NULL);
+		return (NULL);
 	byte_read = 1;
-	while (byte_read != 0 && !ft_strchr(store, '\n'))
+	while (!ft_strchr(store, '\n') && byte_read != 0)
 	{
 		byte_read = read(fd, buffer, BUFFER_SIZE);
 		if (byte_read < 0)
@@ -78,8 +86,6 @@ char	*read_append(int fd, char *store)
 			free(store);
 			return (NULL);
 		}
-		if (byte_read == 0)
-			break ;
 		buffer[byte_read] = '\0';
 		store = ft_strjoin(store, buffer);
 		if (!store)
@@ -90,13 +96,15 @@ char	*read_append(int fd, char *store)
 
 char	*get_next_line(int fd)
 {
-	static char	*store;
+	static char	*store[OPEN_MAX];
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd >= OPEN_MAX || BUFFER_SIZE <= 0)
 		return (NULL);
-	store = read_append(fd, store);
-	line = extract_line(store);
-	store = extra_line(store);
+	store[fd] = read_append(fd, store[fd]);
+	if (!store[fd])
+		return (NULL);
+	line = extract_line(store[fd]);
+	store[fd] = extra_line(store[fd]);
 	return (line);
 }

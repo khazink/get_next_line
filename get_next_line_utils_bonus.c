@@ -1,16 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkaman <kkaman@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 16:09:02 by kkaman            #+#    #+#             */
-/*   Updated: 2025/12/18 22:17:47 by kkaman           ###   ########.fr       */
+/*   Updated: 2025/12/18 20:00:28 by kkaman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
+
+void	ft_bzero(void *s, size_t n)
+{
+	size_t			i;
+	unsigned char	*ptr;
+
+	ptr = (unsigned char *)s;
+	i = 0;
+	while (i < n)
+	{
+		ptr[i] = '\0';
+		i++;
+	}
+}
 
 size_t	ft_strlen(char *s)
 {
@@ -24,24 +38,17 @@ size_t	ft_strlen(char *s)
 	return (i);
 }
 
-char	*ft_strdup(const char *s)
+void	*ft_calloc(size_t nmemb, size_t size)
 {
-	char	*dest;
-	size_t	i;
+	void	*ptr;
+	size_t	total_size;
 
-	if(!s)
+	total_size = nmemb * size;
+	ptr = malloc(total_size);
+	if (!ptr)
 		return (NULL);
-	dest = malloc((ft_strlen((char *)s) + 1) * sizeof(char));
-	if (!dest)
-		return (NULL);
-	i = 0;
-	while (s[i])
-	{
-		dest[i] = s[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
+	ft_bzero(ptr, total_size);
+	return (ptr);
 }
 
 char	*ft_strchr(const char *s, int c)
@@ -74,7 +81,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	}
 	res = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
 	if (!res)
-		return (free(s1), NULL);
+		return (NULL);
 	i = 0;
 	while (s1[i])
 	{
